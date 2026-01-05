@@ -153,7 +153,7 @@ int main() {
                 switch (fileChoice)
                 {
                 case 1:
-                    // agenda_import_from_file(agenda);
+                    agenda_import_from_file(agenda);
                     break;
                 
                 case 2:

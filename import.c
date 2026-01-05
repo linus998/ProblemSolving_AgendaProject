@@ -27,7 +27,10 @@ char* read_file(const char *filename) {
 
 // --- Helper to extract a string value between quotes ---
 void parse_string(const char* src, char* dest, int max_len) {
-    const char *start = strchr(src, '"');
+    // Find the colon first, then the first '"' after the colon to get the value, not the key
+    const char *colon = strchr(src, ':');
+    if (!colon) { dest[0] = '\0'; return; }
+    const char *start = strchr(colon, '"');
     if (!start) { dest[0] = '\0'; return; }
     start++;
     const char *end = strchr(start, '"');
