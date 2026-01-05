@@ -40,39 +40,35 @@ int main() {
         switch (choice)                                        // switch voor de 5 keuzes van het main menu      
         {
             case 1: {                                           // case 1 (toevoegen van een taak)
-                Task* t = malloc(sizeof(Task));                 // plaats alloceren voor 1 task
-                if (!t) {                                       // test of de allocatie gelukt is
-                    printf("Memory allocation failed!\n");      // print fout bootschap
-                    break;                                      // terug naar == MAIN LOOP ==
-                }
-
-                int task_id = 1;                                // initialiseer de task id op 1
-                t->id = task_id++;                              // task id zetten als task_id en dan auto increment
-                t->next = NULL;                                 // volgende task in de gelinkte lijst init op NULL
-
                 int year, month, day;                           // datum initialiseren
                 printf("Enter year, month, day: ");             // vraag voor de datum
                 scanf("%d %d %d", &year, &month, &day);         // scan de ingevoerde datum
 
                 while (getchar() != '\n');                      // input buffer leegmaken
 
-                printf("Enter task title: ");   
-                fgets(t->title, sizeof(t->title), stdin);       // vraag titel en de size of voor dynamische geheugen allocatie
-                t->title[strcspn(t->title, "\n")] = 0;          // verwijder newline
+                char title[100];
+                char description[300];
+                char location[100];
+
+                printf("Enter task title: ");
+                fgets(title, sizeof(title), stdin);
+                title[strcspn(title, "\n")] = 0;
 
                 printf("Enter task description: ");
-                fgets(t->description, sizeof(t->description), stdin);   // vraag beschrijving en de size of voor dynamische geheugen allocatie
-                t->description[strcspn(t->description, "\n")] = 0;      // verwijder newline
+                fgets(description, sizeof(description), stdin);
+                description[strcspn(description, "\n")] = 0;
 
                 printf("Enter task location: ");
-                fgets(t->location, sizeof(t->location), stdin);     // vraag locatie en de size of voor dynamische geheugen allocatie
-                t->location[strcspn(t->location, "\n")] = 0;        // verwijder newline
+                fgets(location, sizeof(location), stdin);
+                location[strcspn(location, "\n")] = 0;
 
+                int start_hour, start_min, end_hour, end_min;
                 printf("Enter start hour and minute: ");
-                scanf("%d %d", &t->start_hour, &t->start_min);      // vraag start tijd
+                scanf("%d %d", &start_hour, &start_min);      // vraag start tijd
                 printf("Enter end hour and minute: ");
-                scanf("%d %d", &t->end_hour, &t->end_min);          // vraag eind tijd
+                scanf("%d %d", &end_hour, &end_min);          // vraag eind tijd
 
+                Task* t = task_create(start_hour, start_min, end_hour, end_min, title, description, location);
                 agenda_add_task(agenda, year, month, day, t);   // taak toevoegen aan de agenda met alle ingevoegde data
 
                 printf("Task added!\n");                        // bevestiging van toegevoegde taak

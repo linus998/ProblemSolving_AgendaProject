@@ -128,15 +128,74 @@ void agenda_clear_tasks(Agenda* agenda) {
     year_clear_all_tasks(agenda->root);
 }
 
+static void trim_whitespace(char *s)
+{
+    if (!s) return;
+    // trim leading
+    char *start = s;
+    while (*start && isspace((unsigned char)*start)) start++;
+    if (start != s) memmove(s, start, strlen(start) + 1);
+    // trim trailing
+    char *end = s + strlen(s) - 1;
+    while (end >= s && isspace((unsigned char)*end)) { *end = '\0'; end--; }
+}
+
 void agenda_import_from_file(Agenda* agenda) {
     char filename[256];
 
-    printf("Enter the JSON file to import: ");
+    printf("Enter the file to import: ");
     if (scanf("%255s", filename) != 1) {
         printf("Invalid input\n");
         return;
     }
+
+    char* file_content = read_file(filename);
+    if (!file_content) {
+        printf("Failed to read file: %s\n", filename);
+        return;
+    }
+
+    int line_num = 0;
+    char *line = strtok(file_content, "\n");
+    int imported = 0;
+
+    while (line) {
+        if (line_num > 0) { // skip header (first line)
+            // skip empty lines
+            char *p = line;
+            while (*p && isspace((unsigned char)*p)) p++;
+            if (*p != '\0') {
+                int year = 0, month = 0, day = 0;
+                int sh = 0, sm = 0, eh = 0, em = 0;
+                char title[100] = "";
+                char description[300] = "";
+                char location[100] = "";
+
+                int matched = sscanf(line,
+                    "%d-%d-%d, %d:%d - %d:%d | %99[^|] | %299[^|] | %99[^\n]",
+                    &year, &month, &day, &sh, &sm, &eh, &em, title, description, location);
+
+                if (matched == 10) {
+                    trim_whitespace(title);
+                    trim_whitespace(description);
+                    trim_whitespace(location);
+
+                    Task *t = task_create(sh, sm, eh, em, title, description, location);
+                    agenda_add_task(agenda, year, month, day, t);
+                    imported++;
+                } else {
+                    printf("Warning: could not parse line %d: %s\n", line_num + 1, line);
+                }
+            }
+        }
+        line_num++;
+        line = strtok(NULL, "\n");
+    }
+
+    free(file_content);
+    printf("Imported %d tasks from '%s'\n", imported, filename);
 }
+
 
 void agenda_export_to_file(Agenda* agenda, char* filename) {
     FILE *fp = fopen(filename, "w");

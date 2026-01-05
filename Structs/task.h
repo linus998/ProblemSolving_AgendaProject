@@ -33,7 +33,7 @@ typedef struct Task {           // Definition of the Task struct
 // Function Prototypes
 // ===========================================================================================
 
-Task* task_create(int id, int start_hour, int start_min, int end_hour, int end_min, const char* title, const char* description, const char* location);
+Task* task_create(int start_hour, int start_min, int end_hour, int end_min, const char* title, const char* description, const char* location);
 void task_free(Task* tk);
 void task_add(Task** head, Task* task);
 void task_free_all(Task* tk);

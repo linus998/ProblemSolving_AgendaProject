@@ -13,13 +13,16 @@
 #include <string.h>
 #include "task.h"
 
+// task id counter
+static int task_id = 0;                        
+                           
 // ===========================================================================================
 // Function Implementations
 // ===========================================================================================
-Task *task_create(int id, int start_hour, int start_min, int end_hour, int end_min, const char *title, const char *description, const char *location)
-{
+Task *task_create(int start_hour, int start_min, int end_hour, int end_min, const char *title, const char *description, const char *location)
+{   
     Task *tk = malloc(sizeof(Task));
-    tk->id = id;
+    tk->id = task_id++;
     tk->start_hour = start_hour;
     tk->start_min = start_min;
     tk->end_hour = end_hour;
