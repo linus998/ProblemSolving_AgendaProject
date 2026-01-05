@@ -145,13 +145,12 @@ void year_clear_all_tasks(Year* root) {
     year_clear_all_tasks(root->right);
 }
 
-void year_print_tree_to_file(FILE *fp, Year *year) {
-    fprintf(fp, "[");
-    for (Year *y = year; y; y = y->right) {
-        printf("DEBUG: Printing year %d to file\n", y->year);
-        fprintf(fp, "{ \"year\": %d, \"months\": ", y->year);
-        month_print_tree_to_file(fp, y->months);
-        fprintf(fp, " }%s", y->right ? ", " : "");
-    }
-    fprintf(fp, "]");
-}
+void year_print_tree_to_file(Year* root, FILE* file) {
+    if (!root) return;
+
+    year_print_tree_to_file(root->left, file);
+    month_print_tree_to_file(root->months, file, root->year);
+
+    year_print_tree_to_file(root->right, file);
+    
+} 

@@ -52,26 +52,20 @@ void task_free_all(Task *tk)
     free(tk);
 }
 
-void task_print_all_to_file(FILE *fp, Task *task)
-{
-    fprintf(fp, "[");
-    for (Task *t = task; t; t = t->next) {
-        fprintf(fp,
-            "{ \"id\": %d, \"start\": \"%02d:%02d\", \"end\": \"%02d:%02d\", "
-            "\"title\": \"%s\", \"description\": \"%s\", \"location\": \"%s\" }%s",
-            t->id, t->start_hour, t->start_min, t->end_hour, t->end_min,
-            t->title, t->description, t->location,
-            t->next ? ", " : ""  // comma only if not last
-        );
-    }
-    fprintf(fp, "]");
-}
-
 void task_print_all(Task *task)
 {
     while (task)
     {
         printf("    [Task %d] %02d:%02d - %02d:%02d | %s | %s | %s\n", task->id, task->start_hour, task->start_min, task->end_hour, task->end_min, task->title, task->description, task->location);
+        task = task->next;
+    }
+}
+
+void task_print_all_to_file(Task *task, FILE *file, int year, int month, int day)
+{
+    while (task)
+    {
+        fprintf(file, "%04d-%02d-%02d, %02d:%02d - %02d:%02d | %s | %s | %s\n", year, month, day, task->start_hour, task->start_min, task->end_hour, task->end_min, task->title, task->description, task->location);
         task = task->next;
     }
 }

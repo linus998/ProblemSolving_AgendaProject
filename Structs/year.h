@@ -24,6 +24,8 @@ typedef struct year {       // Definition of the Year struct
     struct year* right;     // Pointer to the right child in the BST
 } Year;                     // End of Year struct definition
 
+#include <stdio.h>
+
 // ===========================================================================================
 // Function Prototypes
 // ===========================================================================================
@@ -40,8 +42,7 @@ int year_count_matches(Year* year, const char* keyword);
 void year_print_matching(Year* year, const char* keyword);
 void year_delete_tasks_in_range(Year* root, int start_year, int start_month, int start_day, int end_year, int end_month, int end_day);
 void year_clear_all_tasks(Year* root);
-void year_print_tree_to_file(FILE *fp, Year* root);
-
+void year_print_tree_to_file(Year* root, FILE* file);
 // ===========================================================================================
 // end Header Guards
 // ===========================================================================================

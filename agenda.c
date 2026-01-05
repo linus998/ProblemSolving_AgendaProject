@@ -18,7 +18,7 @@
 #include "Structs/month.h"                  // Include the Month struct definition
 #include "Structs/day.h"                    // Include the Day struct definition
 #include "Structs/task.h"                   // Include the Task struct definition
-#include "import.h"
+
 // ===========================================================================================
 // Function Implementations
 // ===========================================================================================
@@ -136,36 +136,35 @@ void agenda_import_from_file(Agenda* agenda) {
         printf("Invalid input\n");
         return;
     }
-
-    char *json = read_file(filename);
-    if (!json) {
-        printf("Failed to read file\n");
-        return;
-    }
-
-    const char *ptr = strstr(json, "\"agenda\": [");
-    if (!ptr) { free(json); return; }
-    ptr += 10; // move past "agenda":[
-
-    agenda->root = year_parse(&ptr);
-    free(json);
 }
 
 void agenda_export_to_file(Agenda* agenda, char* filename) {
     FILE *fp = fopen(filename, "w");
     if (!fp) {
-        perror("Failed to open agenda.json");
+        perror("Failed to open file");
         return;
     }
 
-    fprintf(fp, "{ \"agenda\": ");
-    if (agenda && agenda->root){
-        printf("DEBUG: Root year is %d\n", agenda->root->year);
-        year_print_tree_to_file(fp, agenda->root);
-    }else{
-        fprintf(fp, "[]");
-    }
-    fprintf(fp, " }\n");
+    fprintf(fp, "=== AGENDA EXPORT ===\n");
+    year_print_tree_to_file(agenda->root, fp);
 
     fclose(fp);
+}
+
+char* read_file(const char *filename)       // Helper voor het lezen van de files
+{
+    FILE *fp = fopen(filename, "r");        // file pointer
+    if (!fp) return NULL;                   // error check
+
+    fseek(fp, 0, SEEK_END);                 // ga naar het einde van de file
+    long size = ftell(fp);                  // get file size
+    rewind(fp);                             // terug naar het begin
+
+    char *buffer = malloc(size + 1);            // allocate memory voor file content
+    if (!buffer) { fclose(fp); return NULL; }   // error check
+
+    fread(buffer, 1, size, fp);             // lees bestand in in buffer
+    buffer[size] = '\0';                    // null-terminate string
+    fclose(fp);                             // sluit file   
+    return buffer;                          // geef de buffer met inhoud van de file terug
 }

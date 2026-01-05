@@ -11,6 +11,8 @@
 #ifndef TASK_H
 #define TASK_H
 
+#include <stdio.h>
+
 // ===========================================================================================
 // Struct Definition
 // ===========================================================================================
@@ -36,7 +38,7 @@ void task_free(Task* tk);
 void task_add(Task** head, Task* task);
 void task_free_all(Task* tk);
 void task_print_all(Task* task);
-void task_print_all_to_file(FILE *fp, Task* task);
+void task_print_all_to_file(Task* task, FILE* file, int year, int month, int day);
 
 // ===========================================================================================
 // end Header Guards

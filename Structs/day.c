@@ -144,12 +144,12 @@ void day_clear_all_tasks(Day* root) {
     day_clear_all_tasks(root->right);
 }
 
-void day_print_tree_to_file(FILE *fp, Day *day) {
-    fprintf(fp, "[");
-    for (Day *d = day; d; d = d->right) {
-        fprintf(fp, "{ \"day\": %d, \"tasks\": ", d->day);
-        task_print_all_to_file(fp, d->tasks);
-        fprintf(fp, " }%s", d->right ? ", " : "");
-    }
-    fprintf(fp, "]");
+void day_print_tree_to_file(Day* root, FILE* file, int year, int month) {
+    if (!root) return;
+
+    day_print_tree_to_file(root->left, file, year, month);
+
+    task_print_all_to_file(root->tasks, file, year, month, root->day);
+
+    day_print_tree_to_file(root->right, file, year, month);
 }

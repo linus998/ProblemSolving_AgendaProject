@@ -24,6 +24,8 @@ typedef struct Day {        // Definition of the Day struct
     struct Day* right;      // Pointer to the right child in the BST
 } Day;
 
+#include <stdio.h>
+
 // ===========================================================================================
 // Function Prototypes
 // ===========================================================================================
@@ -40,7 +42,7 @@ int day_count_matches(Day* day, const char* keyword);
 void day_print_matching(Day* day, const char* keyword);
 void day_delete_tasks_in_range(Day* root, int start_day, int end_day);
 void day_clear_all_tasks(Day* root);
-void day_print_tree_to_file(FILE *fp, Day* root);
+void day_print_tree_to_file(Day* root, FILE* file, int year, int month);
 
 // ===========================================================================================
 // end Header Guards

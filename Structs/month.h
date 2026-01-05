@@ -24,6 +24,8 @@ typedef struct Month {      // Definition of the Month struct
     struct Month* right;    // Pointer to the right child in the BST
 } Month;                    // End of Month struct definition
 
+#include <stdio.h>
+
 // ===========================================================================================
 // Function Prototypes
 // ===========================================================================================
@@ -40,7 +42,7 @@ int month_count_matches(Month* month, const char* keyword);
 void month_print_matching(Month* month, const char* keyword);
 void month_delete_tasks_in_range(Month* root, int year, int start_month, int start_day, int end_month, int end_day, int start_year, int end_year);
 void month_clear_all_tasks(Month* root);
-void month_print_tree_to_file(FILE *fp, Month* root);
+void month_print_tree_to_file(Month* root, FILE* file, int year);
 
 // ===========================================================================================
 // end Header Guards

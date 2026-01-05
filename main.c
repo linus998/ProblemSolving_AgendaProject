@@ -192,9 +192,10 @@ int main() {
                     break;                              // naar einde == FILE IN OUT SWITCH ==
                 
                 case 2:                                         // keuze 2 (export naar bestand)
-                    printf("File name to export to (.json): "); // vraag voor bestands naam
+                    printf("File name to export to: ");         // vraag voor bestands naam
                     char filename[256];                         // initialiseer bestands naam array
                     scanf("%s", filename);                      // scan bestands naam
+                    strcat(filename, ".txt");                   // voeg .txt extensie toe aan bestands naam
                     agenda_export_to_file(agenda, filename);    // functie call voor export
                     break;                                      // naar einde == FILE IN OUT SWITCH ==
 

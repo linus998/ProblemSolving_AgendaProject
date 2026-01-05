@@ -14,7 +14,6 @@
 #include "Structs/day.h"
 #include "Structs/month.h"
 #include "Structs/year.h"
-#include "import.h"
 
 // ===========================================================================================
 // Struct Definition
@@ -37,6 +36,7 @@ void agenda_delete_task_date_range(Agenda* agenda, int start_year, int start_mon
 void agenda_clear_tasks(Agenda* agenda);
 void agenda_import_from_file(Agenda* agenda);
 void agenda_export_to_file(Agenda* agenda, char* filename);
+char* read_file(const char *filename);
 
 // ===========================================================================================
 // end of header guards
