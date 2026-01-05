@@ -151,8 +151,8 @@ void agenda_import_from_file(Agenda* agenda) {
     free(json);
 }
 
-void agenda_export_to_file(Agenda* agenda) {
-    FILE *fp = fopen("agenda.json", "w");
+void agenda_export_to_file(Agenda* agenda, char* filename) {
+    FILE *fp = fopen(filename, "w");
     if (!fp) {
         perror("Failed to open agenda.json");
         return;

@@ -191,9 +191,12 @@ int main() {
                     agenda_import_from_file(agenda);    // functie call voor import
                     break;                              // naar einde == FILE IN OUT SWITCH ==
                 
-                case 2:                                 // keuze 2 (export naar bestand)
-                    agenda_export_to_file(agenda);      // functie call voor export
-                    break;                              // naar einde == FILE IN OUT SWITCH ==
+                case 2:                                         // keuze 2 (export naar bestand)
+                    printf("File name to export to (.json): "); // vraag voor bestands naam
+                    char filename[256];                         // initialiseer bestands naam array
+                    scanf("%s", filename);                      // scan bestands naam
+                    agenda_export_to_file(agenda, filename);    // functie call voor export
+                    break;                                      // naar einde == FILE IN OUT SWITCH ==
 
                 default:                                // default case (ongeldige keuze)
                     break;                              // naar einde == FILE IN OUT SWITCH ==

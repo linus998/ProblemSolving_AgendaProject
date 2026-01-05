@@ -36,7 +36,7 @@ void agenda_print_text_matching(const Agenda* agenda, const char* keyword);
 void agenda_delete_task_date_range(Agenda* agenda, int start_year, int start_month, int start_day, int end_year, int end_month, int end_day);
 void agenda_clear_tasks(Agenda* agenda);
 void agenda_import_from_file(Agenda* agenda);
-void agenda_export_to_file(Agenda* agenda);
+void agenda_export_to_file(Agenda* agenda, char* filename);
 
 // ===========================================================================================
 // end of header guards
