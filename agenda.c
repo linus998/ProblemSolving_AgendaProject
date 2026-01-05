@@ -159,10 +159,12 @@ void agenda_export_to_file(Agenda* agenda, char* filename) {
     }
 
     fprintf(fp, "{ \"agenda\": ");
-    if (agenda && agenda->root)
+    if (agenda && agenda->root){
+        printf("DEBUG: Root year is %d\n", agenda->root->year);
         year_print_tree_to_file(fp, agenda->root);
-    else
+    }else{
         fprintf(fp, "[]");
+    }
     fprintf(fp, " }\n");
 
     fclose(fp);
