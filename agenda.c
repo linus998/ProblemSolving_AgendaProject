@@ -23,40 +23,60 @@
 // Function Implementations
 // ===========================================================================================
 
-Agenda* agenda_create() {
+/* AGENDA CREATE
+alloceerd plaats voor de agenda (groodte van de struct agenda)
+zet de root van agenda op null -> wordt later het eerste jaar van de agenda
+geeft de agenda terug
+*/
+Agenda* agenda_create()
+{
     Agenda* ag = malloc(sizeof(Agenda));
     ag->root = NULL;
     return ag;
 }
 
-void agenda_free(Agenda* ag) {
+/* AGENDA FREE
+start het proces van het vrijgeven van heel de agenda
+als er nog geen agenda is of de agenda is niet goed doorgegeven return
+anders start het proces van alle jaren vrijgeven
+zet de agenda terug vrij
+*/
+void agenda_free(Agenda* ag) 
+{
     if (!ag) return;
     year_free(ag->root);
     free(ag);
 }
 
-void agenda_add_task(
-    Agenda* agenda,
-    int year,
-    int month,
-    int day,
-    Task* task
-) {
-    // 1. Ensure YEAR exists
+/* AGENDA ADD TASK
+heeft nodig:
+- de agenda
+- een datum (jaar maand dag)
+- een taak struct
+
+doet:
+- zorgt dat het jaar de maand en de dag bestaan
+- voegt de taak toe op de juiste dag
+*/
+void agenda_add_task(Agenda* agenda, int year, int month, int day, Task* task)
+{
     agenda->root = year_insert(agenda->root, year);
+
     Year* y = year_find(agenda->root, year);
-
-    // 2. Ensure MONTH exists inside that year
     Month* m = year_get_or_create_month(y, month);
-
-    // 3. Ensure DAY exists inside that month
     Day* d = month_get_or_create_day(m, day);
 
-    // 4. Add TASK to the day
     day_add_task(d, task);
 }
 
-void agenda_print(const Agenda* agenda) {
+
+/* PRINT AGENDA
+als er geen agenda is of de agenda heeft geen root, dan print agenda leeg
+anders, print agenda contents gevolgd door het oproepen van het printen van alle jaren
+gevolgd door een afsluit lijn
+*/
+void agenda_print(const Agenda* agenda) 
+{
     if (!agenda || !agenda->root) {
         printf("(Agenda is empty)\n");
         return;
@@ -67,15 +87,19 @@ void agenda_print(const Agenda* agenda) {
     printf("=======================\n");
 }
 
-void agenda_print_date_range(
-    const Agenda* agenda,
-    int start_year,
-    int start_month,
-    int start_day,
-    int end_year,
-    int end_month,
-    int end_day
-) {
+/* PRINT AGENDA DATE RANGE
+heeft nodig:
+- agenda
+- start datum (jaar maand dag)
+- eind datum (jaar maand dag)
+doet:
+- als er geen agenda is of de agenda heeft geen root, dan print agenda leeg
+- anders print de agenda contents from <begin dag> <eind dag>
+- gevolgd door de jaar print in range (geef beide data door)
+- gevolgd door een eind lijn
+*/
+void agenda_print_date_range(const Agenda* agenda, int start_year, int start_month, int start_day, int end_year, int end_month, int end_day) 
+{
     if (!agenda || !agenda->root) {
         printf("(Agenda is empty)\n");
         return;
@@ -87,7 +111,18 @@ void agenda_print_date_range(
     year_print_date_range(agenda->root, start_year, start_month, start_day, end_year, end_month, end_day);
     printf("=============================================================\n");
 }
-
+/* PRINT AGENDA KEYWORD
+heeft nodig:
+- agenda
+- keyword
+doet:
+- als er geen agenda is of de agenda heeft geen root, dan print agenda leeg
+- als er geen keyword is print de hele agenda
+- als er wel een keyword is zoek het aantal matches
+- als er 0 matches zijn print geen match gevonden
+- als er wel matches zijn, print de matches
+- print eindlijn
+*/
 void agenda_print_text_matching(const Agenda* agenda, const char* keyword) {
     if (!agenda || !agenda->root) {
         printf("(Agenda is empty)\n");

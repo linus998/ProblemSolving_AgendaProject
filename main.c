@@ -46,29 +46,29 @@ int main() {
 
                 while (getchar() != '\n');                      // input buffer leegmaken
 
-                char title[100];
-                char description[300];
-                char location[100];
+                char title[100];                                // initialiseer title array
+                char description[300];                          // initialiseer description array
+                char location[100];                             // initialiseer location array
 
                 printf("Enter task title: ");
-                fgets(title, sizeof(title), stdin);
-                title[strcspn(title, "\n")] = 0;
+                fgets(title, sizeof(title), stdin);             // vraag en scan de titel
+                title[strcspn(title, "\n")] = 0;                // verwijder newline karakter
 
                 printf("Enter task description: ");
-                fgets(description, sizeof(description), stdin);
-                description[strcspn(description, "\n")] = 0;
+                fgets(description, sizeof(description), stdin); // vraag en scan de beschrijving
+                description[strcspn(description, "\n")] = 0;    // verwijder newline karakter
 
                 printf("Enter task location: ");
-                fgets(location, sizeof(location), stdin);
-                location[strcspn(location, "\n")] = 0;
+                fgets(location, sizeof(location), stdin);       // vraag en scan de locatie
+                location[strcspn(location, "\n")] = 0;          // verwijder newline karakter
 
-                int start_hour, start_min, end_hour, end_min;
+                int start_hour, start_min, end_hour, end_min;   // initialiseer tijd variabelen
                 printf("Enter start hour and minute: ");
                 scanf("%d %d", &start_hour, &start_min);      // vraag start tijd
                 printf("Enter end hour and minute: ");
                 scanf("%d %d", &end_hour, &end_min);          // vraag eind tijd
 
-                Task* t = task_create(start_hour, start_min, end_hour, end_min, title, description, location);
+                Task* t = task_create(start_hour, start_min, end_hour, end_min, title, description, location);  // maak nieuwe taak met alle ingevoerde data
                 agenda_add_task(agenda, year, month, day, t);   // taak toevoegen aan de agenda met alle ingevoegde data
 
                 printf("Task added!\n");                        // bevestiging van toegevoegde taak
