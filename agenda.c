@@ -123,7 +123,8 @@ doet:
 - als er wel matches zijn, print de matches
 - print eindlijn
 */
-void agenda_print_text_matching(const Agenda* agenda, const char* keyword) {
+void agenda_print_text_matching(const Agenda* agenda, const char* keyword) 
+{
     if (!agenda || !agenda->root) {
         printf("(Agenda is empty)\n");
         return;
@@ -144,7 +145,16 @@ void agenda_print_text_matching(const Agenda* agenda, const char* keyword) {
     printf("=================================\n");
 }
 
-void agenda_delete_task_date_range(Agenda* agenda, int start_year, int start_month, int start_day, int end_year, int end_month, int end_day){
+/* AGENDA DELETE DATUM RANGE
+heeft nodig:
+- agenda
+- start datum
+- eind datum
+doet:
+- 
+*/
+void agenda_delete_task_date_range(Agenda* agenda, int start_year, int start_month, int start_day, int end_year, int end_month, int end_day)
+{
     if (!agenda || !agenda->root) {
         printf("(Agenda is empty)\n");
         return;
