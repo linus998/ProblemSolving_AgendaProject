@@ -111,6 +111,7 @@ void agenda_print_date_range(const Agenda* agenda, int start_year, int start_mon
     year_print_date_range(agenda->root, start_year, start_month, start_day, end_year, end_month, end_day);
     printf("=============================================================\n");
 }
+
 /* PRINT AGENDA KEYWORD
 heeft nodig:
 - agenda
@@ -151,7 +152,11 @@ heeft nodig:
 - start datum
 - eind datum
 doet:
-- 
+- als geen agenda of geen agenda root print lege agenda
+-   als * startdatum is groter dan eind datum
+    of  * startdatum = eind datum
+    dan print invalid date range
+- anders roep functie aan voor jaar datum delete tasks
 */
 void agenda_delete_task_date_range(Agenda* agenda, int start_year, int start_month, int start_day, int end_year, int end_month, int end_day)
 {
@@ -168,23 +173,39 @@ void agenda_delete_task_date_range(Agenda* agenda, int start_year, int start_mon
     year_delete_tasks_in_range(agenda->root, start_year, start_month, start_day, end_year, end_month, end_day);
 }
 
-void agenda_clear_tasks(Agenda* agenda) {
-    if (!agenda || !agenda->root) return;
+/* AGENDA RUIM TAAK OP
+als geen agenda of geen agenda root return (al klaar)
+anders call de jaar functie voor alle taken opruimen
+*/
+void agenda_clear_tasks(Agenda* agenda) 
+{
+    if (!agenda || !agenda->root){
+        return;
+    }
     year_clear_all_tasks(agenda->root);
 }
 
-static void trim_whitespace(char *s)
-{
-    if (!s) return;
-    // trim leading
-    char *start = s;
-    while (*start && isspace((unsigned char)*start)) start++;
-    if (start != s) memmove(s, start, strlen(start) + 1);
-    // trim trailing
-    char *end = s + strlen(s) - 1;
-    while (end >= s && isspace((unsigned char)*end)) { *end = '\0'; end--; }
-}
+/* IMPORTING VAN FILE
+-> filename
+initialiseer filename met 256 characters
+scanf filename en als een verkeerde input is print invalid input
 
+-> content
+call readfile functie op de filename (path)
+als er geen content is print failed to read
+
+-> loop voor lijnen
+
+initialiseren:  * lijn nummer
+                * lijn content
+                * imported counter
+
+de loop gaat dan over elke lijn in de filecontents (behalve de eerste) en
+gerbuikt scanf om alle variabelen van een taak uit de lijn te halen en dan
+wordt de taak toegevoegd aan de agenda met de eerder gebruikte add task functie
+de trim whitespace helper functie wordt hier ook gebruikt voor de whitespaces in
+de lijnen weg te halen
+*/
 void agenda_import_from_file(Agenda* agenda) {
     char filename[256];
 
@@ -205,8 +226,7 @@ void agenda_import_from_file(Agenda* agenda) {
     int imported = 0;
 
     while (line) {
-        if (line_num > 0) { // skip header (first line)
-            // skip empty lines
+        if (line_num > 0) { 
             char *p = line;
             while (*p && isspace((unsigned char)*p)) p++;
             if (*p != '\0') {
@@ -241,7 +261,18 @@ void agenda_import_from_file(Agenda* agenda) {
     printf("Imported %d tasks from '%s'\n", imported, filename);
 }
 
+/* AGENDA EXPORT NAAR BESTAND
+heeft nodig:
+- agenda (pointer)
+- filename (char aray pointer)
 
+doet:
+- maakt filehandeler met de filename
+- als de filepointer niet lukt, geef error
+- anders print agenda export op eerste lijn en ga dan naar 
+    jaar tree functie voor het printen van de tasks naar een file
+- op het einde file terug closen
+*/
 void agenda_export_to_file(Agenda* agenda, char* filename) {
     FILE *fp = fopen(filename, "w");
     if (!fp) {
@@ -255,6 +286,9 @@ void agenda_export_to_file(Agenda* agenda, char* filename) {
     fclose(fp);
 }
 
+// ===========================================================================================
+// Helper functions
+// ===========================================================================================
 char* read_file(const char *filename)       // Helper voor het lezen van de files
 {
     FILE *fp = fopen(filename, "r");        // file pointer
@@ -271,4 +305,16 @@ char* read_file(const char *filename)       // Helper voor het lezen van de file
     buffer[size] = '\0';                    // null-terminate string
     fclose(fp);                             // sluit file   
     return buffer;                          // geef de buffer met inhoud van de file terug
+}
+
+static void trim_whitespace(char *s)
+{
+    if (!s) return;     // check dat er een karakter is    
+    // trim leaing whitespaces from char array             
+    char *start = s;        
+    while (*start && isspace((unsigned char)*start)) start++;
+    if (start != s) memmove(s, start, strlen(start) + 1);
+    // trim trailing whitespaces from char array
+    char *end = s + strlen(s) - 1;
+    while (end >= s && isspace((unsigned char)*end)) { *end = '\0'; end--; }
 }
