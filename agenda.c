@@ -14,10 +14,11 @@
 #include <string.h>                         // For string functions
 #include <ctype.h>                          // For tolower#include <stdbool.h>               // For bool
 #include "agenda.h"                         // Include the Agenda struct definition
-#include "Structs/year.h"                   // Include the Year struct definition
-#include "Structs/month.h"                  // Include the Month struct definition
-#include "Structs/day.h"                    // Include the Day struct definition
-#include "Structs/task.h"                   // Include the Task struct definition
+#include "year.h"                   // Include the Year struct definition
+#include "month.h"                  // Include the Month struct definition
+#include "day.h"                    // Include the Day struct definition
+#include "task.h"                   // Include the Task struct definition
+#include "helpers.h"                // Include the helper functions
 
 // ===========================================================================================
 // Function Implementations
@@ -284,37 +285,4 @@ void agenda_export_to_file(Agenda* agenda, char* filename) {
     year_print_tree_to_file(agenda->root, fp);
 
     fclose(fp);
-}
-
-// ===========================================================================================
-// Helper functions
-// ===========================================================================================
-char* read_file(const char *filename)       // Helper voor het lezen van de files
-{
-    FILE *fp = fopen(filename, "r");        // file pointer
-    if (!fp) return NULL;                   // error check
-
-    fseek(fp, 0, SEEK_END);                 // ga naar het einde van de file
-    long size = ftell(fp);                  // get file size
-    rewind(fp);                             // terug naar het begin
-
-    char *buffer = malloc(size + 1);            // allocate memory voor file content
-    if (!buffer) { fclose(fp); return NULL; }   // error check
-
-    fread(buffer, 1, size, fp);             // lees bestand in in buffer
-    buffer[size] = '\0';                    // null-terminate string
-    fclose(fp);                             // sluit file   
-    return buffer;                          // geef de buffer met inhoud van de file terug
-}
-
-static void trim_whitespace(char *s)
-{
-    if (!s) return;     // check dat er een karakter is    
-    // trim leaing whitespaces from char array             
-    char *start = s;        
-    while (*start && isspace((unsigned char)*start)) start++;
-    if (start != s) memmove(s, start, strlen(start) + 1);
-    // trim trailing whitespaces from char array
-    char *end = s + strlen(s) - 1;
-    while (end >= s && isspace((unsigned char)*end)) { *end = '\0'; end--; }
 }

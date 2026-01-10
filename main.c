@@ -12,7 +12,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "agenda.h"
-#include "Structs/task.h"
+#include "task.h"
 
 // ===========================================================================================
 // Main Function
