@@ -210,11 +210,8 @@ de lijnen weg te halen
 void agenda_import_from_file(Agenda* agenda) {
     char filename[256];
 
-    printf("Enter the file to import: ");
-    if (scanf("%255s", filename) != 1) {
-        printf("Invalid input\n");
-        return;
-    }
+    /* validated filename input */
+    prompt_string("Enter the file to import: ", filename, sizeof(filename), "filename (e.g., data.txt)");
 
     char* file_content = read_file(filename);
     if (!file_content) {

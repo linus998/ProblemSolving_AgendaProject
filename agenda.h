@@ -14,6 +14,7 @@
 #include "day.h"
 #include "month.h"
 #include "year.h"
+#include "helpers.h"
 
 // ===========================================================================================
 // Struct Definition

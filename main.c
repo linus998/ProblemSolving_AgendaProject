@@ -13,6 +13,7 @@
 #include <string.h>
 #include "agenda.h"
 #include "task.h"
+#include "helpers.h"
 
 // ===========================================================================================
 // Main Function
@@ -33,18 +34,15 @@ int main() {
         printf("3. Delete a task\n");               // keuze 3, verwijderen van taken (meerdere mogelijkheden)
         printf("4. File in and output\n");          // keuze 4, input and output van de agenda (meerdere mogelijkheden)
         printf("5. Exit\n");                        // keuze 5, exit
-        printf("Enter your choice: ");              // input veld
-        //=======================================
-        scanf("%d", &choice);                       // scanf voor de gemaakte keuze
+        /* prompt and validate main menu choice */
+        choice = prompt_int("Enter your choice: ", "integer (e.g., 1)");                       // input with validation
         
         switch (choice)                                        // switch voor de 5 keuzes van het main menu      
         {
             case 1: {                                           // case 1 (toevoegen van een taak)
                 int year, month, day;                           // datum initialiseren
-                printf("Enter year, month, day: ");             // vraag voor de datum
-                scanf("%d %d %d", &year, &month, &day);         // scan de ingevoerde datum
-
-                while (getchar() != '\n');                      // input buffer leegmaken
+                /* validated date input */
+                prompt_three_ints("Enter year, month, day (YYYY MM DD): ", &year, &month, &day, "YYYY MM DD (e.g., 2026 1 31)");
 
                 char title[100];                                // initialiseer title array
                 char description[300];                          // initialiseer description array
@@ -63,10 +61,8 @@ int main() {
                 location[strcspn(location, "\n")] = 0;          // verwijder newline karakter
 
                 int start_hour, start_min, end_hour, end_min;   // initialiseer tijd variabelen
-                printf("Enter start hour and minute: ");
-                scanf("%d %d", &start_hour, &start_min);      // vraag start tijd
-                printf("Enter end hour and minute: ");
-                scanf("%d %d", &end_hour, &end_min);          // vraag eind tijd
+                prompt_two_ints("Enter start hour and minute (HH MM): ", &start_hour, &start_min, "HH MM (e.g., 9 30)");
+                prompt_two_ints("Enter end hour and minute (HH MM): ", &end_hour, &end_min, "HH MM (e.g., 10 30)");
 
                 Task* t = task_create(start_hour, start_min, end_hour, end_min, title, description, location);  // maak nieuwe taak met alle ingevoerde data
                 agenda_add_task(agenda, year, month, day, t);   // taak toevoegen aan de agenda met alle ingevoegde data
@@ -82,9 +78,7 @@ int main() {
                 printf("2. Print tasks in date range\n");       // keuze 2, print (bepaalde datum range)
                 printf("3. Print text matching\n");             // keuze 3, print (bepaalde tekst bevatten)
                 printf("4. Exit\n");                            // keuze 4, exit
-                printf("Enter your choice: ");                  // input veld
-                //=======================================
-                scanf("%d", &printChoice);                      // scanf voor de gemaakte keuze
+                printChoice = prompt_int("Enter your choice: ", "integer (e.g., 1)");                      // validated print menu choice
 
                 switch (printChoice){           // == PRINT SWITCH == voor de 4 keuzes van het print menu
                     case 1:
@@ -93,10 +87,8 @@ int main() {
                     
                     case 2:                     // keuze 2 (print in datum range)
                         int start_year, start_month, start_day, end_year, end_month, end_day;   // initialiseer data
-                        printf("Enter start year, month, day: ");                               // vraag start datum
-                        scanf("%d %d %d", &start_year, &start_month, &start_day);               // scan start datum
-                        printf("Enter end year, month, day: ");                                 // vraag eind datum
-                        scanf("%d %d %d", &end_year, &end_month, &end_day);                     // scan eind datum
+                        prompt_three_ints("Enter start year, month, day (YYYY MM DD): ", &start_year, &start_month, &start_day, "YYYY MM DD (e.g., 2026 1 31)");
+                        prompt_three_ints("Enter end year, month, day (YYYY MM DD): ", &end_year, &end_month, &end_day, "YYYY MM DD (e.g., 2026 2 28)");
 
                         agenda_print_date_range(    // print functie callen    
                             agenda, 
@@ -111,8 +103,7 @@ int main() {
                     
                     case 3:                                             // keuze 3 (print met bepaalde tekst)
                         char keyword[100];                              // initialiseer keyword array
-                        printf("Enter keyword to search: ");            
-                        scanf("%s", keyword);                           
+                        prompt_string("Enter keyword to search: ", keyword, sizeof(keyword), "single word (no spaces)");
                         agenda_print_text_matching(agenda, keyword);    // print functie callen met text matching
                         break;                                          // naar einde == PRINT SWITCH ==
                         
@@ -132,18 +123,14 @@ int main() {
                 printf("1. Delete task in date range\n");   // keuze 1, delete in datum range
                 printf("2. Clear all tasks\n");             // keuze 2, delete alle taken
                 printf("3. Exit\n");                        // keuze 3, exit
-                printf("Enter your choice: ");              // input veld
-                //=======================================
-                scanf("%d", &deleteChoice);                 // scanf voor de gemaakte keuze
+                deleteChoice = prompt_int("Enter your choice: ", "integer (e.g., 1)");                 // validated delete choice
 
                 switch (deleteChoice) // == DELETE SWITCH == voor de 3 keuzes van het delete menu
                 {
                     case 1: // keuze 1 (delete in datum range)
                         int start_year, start_month, start_day, end_year, end_month, end_day;   // initialiseer data
-                        printf("Enter start year, month, day: ");                               // vraag start datum  
-                        scanf("%d %d %d", &start_year, &start_month, &start_day);               // scan start datum
-                        printf("Enter end year, month, day: ");                                 // vraag eind datum 
-                        scanf("%d %d %d", &end_year, &end_month, &end_day);                     // scan eind datum
+                        prompt_three_ints("Enter start year, month, day (YYYY MM DD): ", &start_year, &start_month, &start_day, "YYYY MM DD (e.g., 2026 1 31)");
+                        prompt_three_ints("Enter end year, month, day (YYYY MM DD): ", &end_year, &end_month, &end_day, "YYYY MM DD (e.g., 2026 2 28)");
                         agenda_delete_task_date_range(  //delete funtion callen met date range
                             agenda,
                             start_year, 
@@ -176,9 +163,7 @@ int main() {
                 printf("1. Import from file\n");            // keuze 1, import van bestand
                 printf("2. Export to file\n");              // keuze 2, export naar bestand
                 printf("3. Exit\n");                        // keuze 3, exit
-                printf("Enter your choice: ");              // input veld
-                //=======================================
-                scanf("%d", &fileChoice);                   // scanf voor de gemaakte keuze
+                fileChoice = prompt_int("Enter your choice: ", "integer (e.g., 1)");                   // validated file menu choice
 
                 switch (fileChoice) // == FILE IN OUT SWITCH == file in and output menu
                 {
@@ -188,9 +173,8 @@ int main() {
                     break;                              // naar einde == FILE IN OUT SWITCH ==
                 
                 case 2:                                         // keuze 2 (export naar bestand)
-                    printf("File name to export to: ");         // vraag voor bestands naam
                     char filename[256];                         // initialiseer bestands naam array
-                    scanf("%s", filename);                      // scan bestands naam
+                    prompt_string("File name to export to (without extension): ", filename, sizeof(filename) - 5, "filename without extension (e.g., backup)");
                     strcat(filename, ".txt");                   // voeg .txt extensie toe aan bestands naam
                     agenda_export_to_file(agenda, filename);    // functie call voor export
                     break;                                      // naar einde == FILE IN OUT SWITCH ==

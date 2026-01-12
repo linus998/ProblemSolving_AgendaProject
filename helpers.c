@@ -1,7 +1,7 @@
 
 // =============================================================================================//
 // Name: Linus Beheydt                                                                          //
-// Number: 2508401                                                                              //
+// Nubmer: 2508401                                                                              //
 // Filename: helpers.c                                                                          //
 // Description: Implementatie van de helper functies voor agenda.c                              //
 // =============================================================================================//
@@ -53,7 +53,7 @@ char* read_file(const char *filename)       // Helper voor het lezen van de file
     return buffer;                          // geef de buffer met inhoud van de file terug
 }
 
-static void trim_whitespace(char *s)
+void trim_whitespace(char *s)
 {
     if (!s) return;// check dat er een karakter is    
     // trim leaing whitespaces from char array             
@@ -63,4 +63,69 @@ static void trim_whitespace(char *s)
     // trim trailing whitespaces from char array
     char *end = s + strlen(s) - 1;
     while (end >= s && isspace((unsigned char)*end)) { *end = '\0'; end--; }
+}
+
+// ===========================================================================================
+// Input helpers (validated prompts)
+// ===========================================================================================
+
+int prompt_int(const char *prompt, const char *format_hint)
+{
+    char buf[128];
+    int value;
+    while (1) {
+        if (prompt) printf("%s", prompt);
+        if (!fgets(buf, sizeof(buf), stdin)) { clearerr(stdin); continue; }
+        // allow leading/trailing whitespace
+        trim_whitespace(buf);
+        if (buf[0] == '\0') {
+            printf("Invalid input. Format: %s\n", format_hint ? format_hint : "integer (e.g., 1)");
+            continue;
+        }
+        if (sscanf(buf, "%d", &value) == 1) return value;
+        printf("Invalid input. Format: %s\n", format_hint ? format_hint : "integer (e.g., 1)");
+    }
+}
+
+void prompt_two_ints(const char *prompt, int *a, int *b, const char *format_hint)
+{
+    char buf[128];
+    while (1) {
+        if (prompt) printf("%s", prompt);
+        if (!fgets(buf, sizeof(buf), stdin)) { clearerr(stdin); continue; }
+        trim_whitespace(buf);
+        if ((sscanf(buf, "%d %d", a, b) != 2) || (*a > 23 || *b > 59)){       
+            printf("Invalid input. Format: %s\n", format_hint ? format_hint : "two integers separated by space (e.g., 9 30)");
+        } else {
+            return;
+        }
+    }
+}
+
+void prompt_three_ints(const char *prompt, int *a, int *b, int *c, const char *format_hint)
+{
+    char buf[256];
+    while (1) {
+        if (prompt) printf("%s", prompt);
+        if (!fgets(buf, sizeof(buf), stdin)) { clearerr(stdin); continue; }
+        trim_whitespace(buf);
+        if (sscanf(buf, "%d %d %d", a, b, c) == 3) return;
+        printf("Invalid input. Format: %s\n", format_hint ? format_hint : "three integers separated by space (e.g., 2026 1 31)");
+    }
+}
+
+void prompt_string(const char *prompt, char *buf, size_t bufsize, const char *format_hint)
+{
+    while (1) {
+        if (prompt) printf("%s", prompt);
+        if (!fgets(buf, bufsize, stdin)) { clearerr(stdin); continue; }
+        // remove trailing newline and trim
+        buf[strcspn(buf, "\n")] = '\0';
+        trim_whitespace(buf);
+        if (buf[0] == '\0') {
+            printf("Invalid input. Format: %s\n", format_hint ? format_hint : "non-empty text");
+            continue;
+        }
+        return;
+    }
 }
