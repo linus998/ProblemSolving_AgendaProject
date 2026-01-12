@@ -9,16 +9,16 @@
 // Includes
 // ===========================================================================================
 
-#include <stdlib.h>                         // For malloc and free
-#include <stdio.h>                          // For printf
-#include <string.h>                         // For string functions
-#include <ctype.h>                          // For tolower#include <stdbool.h>               // For bool
-#include "agenda.h"                         // Include the Agenda struct definition
-#include "year.h"                   // Include the Year struct definition
-#include "month.h"                  // Include the Month struct definition
-#include "day.h"                    // Include the Day struct definition
-#include "task.h"                   // Include the Task struct definition
-#include "helpers.h"                // Include the helper functions
+#include <stdlib.h>     // For malloc and free
+#include <stdio.h>      // For printf
+#include <string.h>     // For string functions
+#include <ctype.h>      // For tolower#include <stdbool.h>               // For bool
+#include "agenda.h"     // Include the Agenda struct definition
+#include "year.h"       // Include the Year struct definition
+#include "month.h"      // Include the Month struct definition
+#include "day.h"        // Include the Day struct definition
+#include "task.h"       // Include the Task struct definition
+#include "helpers.h"    // Include the helper functions
 
 // ===========================================================================================
 // Function Implementations

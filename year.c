@@ -17,7 +17,13 @@
 // ===========================================================================================
 // Function Implementations
 // ===========================================================================================
-Year* year_create(int year_num) {
+/* MAAK NIEUW JAAR
+alloceer struct size
+vul jaar nummer in
+de rest NULL en return het jaar
+*/
+Year* year_create(int year_num) 
+{
     Year* yr = malloc(sizeof(Year));
     yr->year = year_num;
     yr->months = NULL;
@@ -26,13 +32,26 @@ Year* year_create(int year_num) {
     return yr;
 }
 
-void year_free(Year* yr) {
+/* VERWIJDER JAAR
+als jaar return
+anders verwijder jaar functie
+verwijder jaar zelf
+*/
+void year_free(Year* yr) 
+{
     if (!yr) return;
     month_free(yr->months);
     free(yr);
 }
 
-void year_free_all(Year* yr) {
+/* ALLE JAREN VERWIJDEREN
+als geen jaar, return
+recursief links en rechts jaren verwijderen
+verwijder alle maanden in het originele jaar
+verwijder het jaar zelf
+*/
+void year_free_all(Year* yr) 
+{
     if (!yr) return;
     year_free_all(yr->left);
     year_free_all(yr->right);
@@ -40,6 +59,13 @@ void year_free_all(Year* yr) {
     free(yr);
 }
 
+/* JAAR INSERTEN
+als geen root return het jaar door create new year
+als jaar kleiner is dan rootn de linker van de root zet gelijk aan 
+het jaar dat gemaakt wordt door recursief de functie aan te roepen
+anders als het jaar groter is, zelfde maar dan rechts
+anders gewoon root terug geven
+*/
 Year* year_insert(Year* root, int year_num) {
     if (!root) return year_create(year_num);
 

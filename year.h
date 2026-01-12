@@ -10,7 +10,7 @@
 // ===========================================================================================
 #ifndef YEAR_H
 #define YEAR_H
-typedef struct Month Month;       // Forward declaration of Month struct
+typedef struct Month Month;  // Forward declaration of Month struct
 
 // ===========================================================================================
 // Struct Definition
