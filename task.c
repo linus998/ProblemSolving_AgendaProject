@@ -1,8 +1,8 @@
 // =============================================================================================//
 // Name: Linus Beheydt                                                                          //
 // Number: 2508401                                                                              //
-// Filename: task.c                                                                              //
-// Description: Implementation file for the Task struct and related functions.                   //
+// Filename: task.c                                                                             //
+// Description: Implementation file for the Task struct and related functions.                  //
 // =============================================================================================//
 
 // ===========================================================================================
@@ -19,6 +19,13 @@ static int task_id = 0;
 // ===========================================================================================
 // Function Implementations
 // ===========================================================================================
+
+/* TASK CREATE
+alloceer de grootte van een task struct
+task id +  (static int in deze file)
+alle members van de task struct invullen met de doorgegeven argumenten
+return de task
+*/
 Task *task_create(int start_hour, int start_min, int end_hour, int end_min, const char *title, const char *description, const char *location)
 {   
     Task *tk = malloc(sizeof(Task));
@@ -34,6 +41,10 @@ Task *task_create(int start_hour, int start_min, int end_hour, int end_min, cons
     return tk;
 }
 
+/* VERWIJDER TASK   
+als er geen taak is return
+anders free de task
+*/
 void task_free(Task *tk)
 {
     if (!tk)
@@ -41,12 +52,20 @@ void task_free(Task *tk)
     free(tk);
 }
 
+/* VOEG TAAK TOE
+head van de gelinkte lijst, nieuwe head naar de task
+*/
 void task_add(Task **head, Task *task)
 {
     task->next = *head;
     *head = task;
 }
 
+/* TASK FREE ALL
+als geen task, return
+anders recursief de hele gelinkte lijst verwijderen
+en dan de taak zelf verwijderen
+*/
 void task_free_all(Task *tk)
 {
     if (!tk)
@@ -55,6 +74,9 @@ void task_free_all(Task *tk)
     free(tk);
 }
 
+/* TASK PRINT ALL
+zolang er een taak is print de taak en ga naar de volgende
+*/
 void task_print_all(Task *task)
 {
     while (task)
@@ -64,6 +86,9 @@ void task_print_all(Task *task)
     }
 }
 
+/* PRINT TO FILE
+zelfde als print all maar naar file en ander formaat voor export
+*/
 void task_print_all_to_file(Task *task, FILE *file, int year, int month, int day)
 {
     while (task)

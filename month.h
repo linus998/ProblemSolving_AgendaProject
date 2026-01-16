@@ -15,7 +15,6 @@ typedef struct Day Day;         // Forward declaration of Day struct
 // ===========================================================================================
 // Struct Definition
 // ===========================================================================================
-
 typedef struct Month {      // Definition of the Month struct
     int month;              // Month number (1-12)
     Day* days;              // Pointer to the BST of days in the month
@@ -24,12 +23,14 @@ typedef struct Month {      // Definition of the Month struct
     struct Month* right;    // Pointer to the right child in the BST
 } Month;                    // End of Month struct definition
 
+// ===========================================================================================
+// Includes
+// ===========================================================================================
 #include <stdio.h>
 
 // ===========================================================================================
 // Function Prototypes
 // ===========================================================================================
-
 Month* month_create(int month_num);
 void month_free(Month* mt);
 Month* month_insert(Month* root, int month_num);

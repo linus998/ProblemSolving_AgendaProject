@@ -66,7 +66,14 @@ void trim_whitespace(char *s)
 // ===========================================================================================
 // Input helpers (validated prompts)
 // ===========================================================================================
-
+/*  PROMT INY
+init een buffer en een value variable
+loop:
+    als er een prompt is print de prompt
+    leest user input naar de buffer, als dat mislukt -> wis error vlag en continue the loop
+    anders, call trim whitespace, en als de buffer begint met een \0, dan is het een invalud input
+    als het formaat klopt return de value en anders print format hint en do loop onieuw to juiste antwoord gegeven is    
+*/
 int prompt_int(const char *prompt, const char *format_hint)
 {
     char buf[128];
@@ -74,7 +81,6 @@ int prompt_int(const char *prompt, const char *format_hint)
     while (1) {
         if (prompt) printf("%s", prompt);
         if (!fgets(buf, sizeof(buf), stdin)) { clearerr(stdin); continue; }
-        // allow leading/trailing whitespace
         trim_whitespace(buf);
         if (buf[0] == '\0') {
             printf("Invalid input. Format: %s\n", format_hint ? format_hint : "integer (e.g., 1)");
@@ -85,6 +91,10 @@ int prompt_int(const char *prompt, const char *format_hint)
     }
 }
 
+/* PROMT TWO INTS FOR TIME
+Zelfde als de vorige functie maar deze checked ook voor een valid uur
+dus als a groter is dan 23 of b groter dan 59 dan is het niet valid
+*/
 void prompt_two_ints(const char *prompt, int *a, int *b, const char *format_hint)
 {
     char buf[128];
@@ -100,6 +110,9 @@ void prompt_two_ints(const char *prompt, int *a, int *b, const char *format_hint
     }
 }
 
+/* PROMPT DRIE INTS
+opnieuw zelfde als promt int maar met 3 integers
+*/
 void prompt_three_ints(const char *prompt, int *a, int *b, int *c, const char *format_hint)
 {
     char buf[256];
@@ -112,14 +125,16 @@ void prompt_three_ints(const char *prompt, int *a, int *b, int *c, const char *f
     }
 }
 
+/* PROMPT STRING
+opnieuw hetzelfde als promt int maar dan voor een char array
+*/
 void prompt_string(const char *prompt, char *buf, size_t bufsize, const char *format_hint)
 {
     while (1) {
         if (prompt) printf("%s", prompt);
         if (!fgets(buf, bufsize, stdin)) { clearerr(stdin); continue; }
-        // remove trailing newline and trim
         buf[strcspn(buf, "\n")] = '\0';
-        trim_whitespace(buf);
+        trim_whitespace( buf);
         if (buf[0] == '\0') {
             printf("Invalid input. Format: %s\n", format_hint ? format_hint : "non-empty text");
             continue;
